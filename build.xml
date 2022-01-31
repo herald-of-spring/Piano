@@ -1,0 +1,25 @@
+<?eclipse.ant.import?>
+<project name="SearchMap" default="compile" basedir=".">
+	<property name="source.dir" location="src"/>
+	<property name="compile.dir" location="bin"/>
+	<property name="doc.dir" location="doc"/>
+	<property name="dist.dir" location="dist"/>
+	<target name="init" description="creates folders">
+		<mkdir dir="${compile.dir}"/>
+		<mkdir dir="${doc.dir}"/>
+		<mkdir dir="${dist.dir}"/>
+	</target>
+	<target name="compile" depends="init" description="compiles java into class files">
+		<javac srcdir="${source.dir}" destdir="${compile.dir}"/>
+	</target>
+	<target name="doc" depends="init" description="writes class method documentation">
+		<javadoc sourcepath="${source.dir}" destdir="${doc.dir}"/>
+	</target>
+	<target name="dist" description="???">
+	</target>
+	<target name="clean" description="clears folders except src">
+		<delete dir="${compile.dir}"/>
+		<delete dir="${doc.dir}"/>
+		<delete dir="${dist.dir}"/>
+	</target>
+</project>
