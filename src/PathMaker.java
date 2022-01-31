@@ -13,7 +13,7 @@ public class PathMaker {
 	 * 
 	 * @param args first the input filename, then the output destination
 	 */
-	private static void main(String[] args) {
+	public static void main(String[] args) {
 		Character start = null;
 		allLoc = new HashMap<Character, FlightMap>();
 		visited = new HashMap<Character, Integer>();
@@ -51,9 +51,13 @@ public class PathMaker {
 	 * 
 	 * @param start the starting node for traversal
 	 */
+	@SuppressWarnings("unchecked")
 	public static void bfs(Character start) {
 		next.add(start); 
 		visited.put(start, 0);
+		ArrayList<Character> temp = new ArrayList<Character>();
+		temp.add(start);    //only has starting point, where the path length will grow
+		path.put(start, temp);
 		while (!next.isEmpty()) {    //start BFS, with some (not recommended) shortcuts 
 			Character curr = next.poll(); 
 			Integer cost = visited.get(curr); 
@@ -62,10 +66,13 @@ public class PathMaker {
 				if (!visited.containsKey(nextLoc)) { 
 					next.add(nextLoc);
 					visited.put(nextLoc, cost+allLoc.get(curr).cost(nextLoc));    //adds the cost of previous node and edge cost
-					
-					path.put(nextLoc, curr);
+					ArrayList<Character> newPath = (ArrayList<Character>)path.get(curr).clone();
+					newPath.add(nextLoc);    //old path + new location
+					path.put(nextLoc, newPath);
 				} 
 			} 
 		}
+		visited.remove(start);
+		path.remove(start);    //primer for easier writing to file
 	}
 }
