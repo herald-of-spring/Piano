@@ -4,6 +4,7 @@ import java.util.*;
 public class PathMaker {
 	private static Map<Character, FlightMap> allLoc;    //location pointing to FlightMap data
 	private static Map<Character, Integer> visited;    //visitation status and associated total cost
+	private static Map<Character, ArrayList<Character>> path;    //notes the path taken to get to certain location
 	private static Queue<Character> next;    //traversal status
 	
 	/**
@@ -13,10 +14,11 @@ public class PathMaker {
 	 * @param args first the input filename, then the output destination
 	 */
 	private static void main(String[] args) {
-		Character start;
+		Character start = null;
 		allLoc = new HashMap<Character, FlightMap>();
 		visited = new HashMap<Character, Integer>();
 		next = new ArrayDeque<Character>();
+		path = new HashMap<Character, ArrayList<Character>>();
 		try (Scanner reader = new Scanner(new File(args[0]))) {    //try block parses
 			start = reader.next().charAt(0);    //saves initial location, not safe
 			while (reader.hasNext()) {    //dangerous if wrong formatting
@@ -31,10 +33,39 @@ public class PathMaker {
 		catch (FileNotFoundException fnf) {
 			System.out.println("Invalid file.");
 		}
+		bfs(start);
+		try (PrintWriter writer = new PrintWriter(new File(args[1]))) {    //output writing
+			writer.println("Destination" + '\t' + "Flight Route from " + start + '\t' + "Total Cost");
+			for (Character location : path.keySet()) {
+				writer.println(location + '\t' + path.get(location).toString() + '\t' + "$" + visited.get(location));
+			}
+		}
 		catch (IOException io) {
-			System.out.print("Formatting error.");
+			System.out.println("Error in writing file.");
 		}
 		
-		args[1];
+	}
+	
+	/**
+	 * Traverses all possible locations, noting travel history and compounding costs, not optimized for cheapest cost
+	 * 
+	 * @param start the starting node for traversal
+	 */
+	public static void bfs(Character start) {
+		next.add(start); 
+		visited.put(start, 0);
+		while (!next.isEmpty()) {    //start BFS, with some (not recommended) shortcuts 
+			Character curr = next.poll(); 
+			Integer cost = visited.get(curr); 
+			Set<Character> locList = allLoc.get(curr).next(); 
+			for (Character nextLoc : locList) { 
+				if (!visited.containsKey(nextLoc)) { 
+					next.add(nextLoc);
+					visited.put(nextLoc, cost+allLoc.get(curr).cost(nextLoc));    //adds the cost of previous node and edge cost
+					
+					path.put(nextLoc, curr);
+				} 
+			} 
+		}
 	}
 }
