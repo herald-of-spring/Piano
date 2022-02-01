@@ -23,9 +23,13 @@ public class SearchMap {
 			start = reader.next().charAt(0);    //saves initial location, not safe
 			while (reader.hasNext()) {    //dangerous if wrong formatting
 				Character loc1 = reader.next().charAt(0);
-				allLoc.put(loc1, new FlightMap(loc1));    //saves 2 locations
+				if (allLoc.get(loc1) == null) {
+					allLoc.put(loc1, new FlightMap(loc1));    //saves 2 locations
+				}
 				Character loc2 = reader.next().charAt(0);
-				allLoc.put(loc2, new FlightMap(loc2));
+				if (allLoc.get(loc2) == null) {
+					allLoc.put(loc2, new FlightMap(loc2));
+				}
 				Integer cost = Integer.parseInt(reader.next());    //then an associated cost
 				allLoc.get(loc1).add(loc2, cost);
 			}
@@ -37,7 +41,19 @@ public class SearchMap {
 		try (PrintWriter writer = new PrintWriter(new File(args[1]))) {    //output writing
 			writer.println("Destination" + '\t' + "Flight Route from " + start + '\t' + "Total Cost");
 			for (Character location : path.keySet()) {
-				writer.println(location + '\t' + path.get(location).toString() + '\t' + "$" + visited.get(location));
+				writer.print(location);
+				writer.print('\t');
+				writer.print('\t');    //best attempt at pretty printing
+				int i = 0;    //comma counter
+				for (Character loc : path.get(location)) {
+					if (i != 0) {
+						writer.print(", ");
+					}
+					writer.print(loc);
+					++i;
+				}
+				writer.print('\t');
+				writer.println('\t' + "$" + visited.get(location));
 			}
 		}
 		catch (IOException io) {

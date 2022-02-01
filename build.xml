@@ -18,7 +18,7 @@
 		<mkdir dir="${doc.dir}"/>
 	</target>
 	<target name="compile" depends="init" description="compiles main and test java into class files">
-		<javac source="11" target="14" srcdir="${source.dir}" destdir="${compile.dir}" includeantruntime="false">
+		<javac target="14" srcdir="${source.dir}" destdir="${compile.dir}" includeantruntime="false">
 			<classpath refid="build.classpath"/>
 		</javac>
 	</target>
@@ -40,7 +40,7 @@
 		</javadoc>
 	</target>
 	<target name="dist" depends="compile" description="creates jar file of class">
-		<jar destfile="SearchMap.jar" basedir="${compile.dir}">
+		<jar destfile="bin/SearchMap.jar" basedir="${compile.dir}">
 			<manifest>
 				<attribute name="Main-Class" value="SearchMap"/>
 			</manifest>
