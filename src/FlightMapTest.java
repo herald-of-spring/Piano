@@ -1,8 +1,6 @@
-import static org.junit.jupiter.api.Assertions.*;
-
 import java.util.*;
-
 import org.junit.*;
+import static org.junit.Assert.*;
 
 class FlightMapTest {
 	private FlightMap a = new FlightMap('A');
@@ -51,7 +49,7 @@ class FlightMapTest {
 	 */
 	@Test
 	public void costTest() {
-		assertEquals(400, a.cost('C'));
+		assertEquals((Integer)400, a.cost('C'));
 		assertEquals(200+1000, a.cost('B')+b.cost('D'));
 	}
 }
