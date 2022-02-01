@@ -4,6 +4,12 @@
 	<property name="compile.dir" location="bin"/>
 	<property name="doc.dir" location="doc"/>
 	<property name="dist.dir" location="dist"/>
+	<property name="lib.dir" location="lib"/>
+	<path id="build.classpath">
+		<fileset dir="${lib.dir}">
+			<include name="\*\*/\*.jar"/>
+		</fileset>
+	</path>
 	<target name="init" description="creates folders">
 		<mkdir dir="${compile.dir}"/>
 		<mkdir dir="${doc.dir}"/>

@@ -1,7 +1,7 @@
 import java.io.*;
 import java.util.*;
 
-public class PathMaker {
+public class SearchMap {
 	private static Map<Character, FlightMap> allLoc;    //location pointing to FlightMap data
 	private static Map<Character, Integer> visited;    //visitation status and associated total cost
 	private static Map<Character, ArrayList<Character>> path;    //notes the path taken to get to certain location
