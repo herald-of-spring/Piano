@@ -2,7 +2,7 @@ import java.util.*;
 import org.junit.*;
 import static org.junit.Assert.*;
 
-class FlightMapTest {
+public class FlightMapTest {
 	private FlightMap a = new FlightMap('A');
 	private FlightMap b = new FlightMap('B');
 	private FlightMap c = new FlightMap('C');

@@ -3,12 +3,11 @@
 	<property name="source.dir" location="src"/>
 	<property name="compile.dir" location="bin"/>
 	<property name="doc.dir" location="doc"/>
-	<property name="dist.dir" location="dist"/>
 	<property name="lib.dir" location="lib"/>
 	<property name="test.dir" location="test"/>
 	<path id="build.classpath">
 		<fileset dir="${lib.dir}">
-			<include name="\*\*/\*.jar"/>
+			<include name="**/*.jar"/>
 		</fileset>
 	</path>
 	<path id="run.classpath">
@@ -17,19 +16,16 @@
 	<target name="init" description="creates folders">
 		<mkdir dir="${compile.dir}"/>
 		<mkdir dir="${doc.dir}"/>
-		<mkdir dir="${dist.dir}"/>
 	</target>
 	<target name="compile" depends="init" description="compiles main and test java into class files">
-		<javac target="11" srcdir="${source.dir}" destdir="${compile.dir}">
+		<javac source="11" target="14" srcdir="${source.dir}" destdir="${compile.dir}" includeantruntime="false">
 			<classpath refid="build.classpath"/>
 		</javac>
 	</target>
 	<target name="test" depends="compile" description="executes junit tests">
 		<junit printsummary="yes" haltonfailure="no">
-			<classpath>
-		    	<path refid="build.classpath"/>
-        		<pathelement location="${compile.dir}"/>
-		    </classpath>
+			<classpath refid="build.classpath"/>
+			<classpath refid="run.classpath"/>
 			<formatter type="xml"/>
 		    <formatter type="plain"/>
 	        <batchtest fork="yes" todir=".">
@@ -38,10 +34,13 @@
 		</junit>
 	</target>
 	<target name="doc" depends="init" description="writes class method documentation">
-		<javadoc sourcepath="${source.dir}" destdir="${doc.dir}"/>
+		<javadoc sourcefiles="src/FlightMap.java , src/SearchMap.java" destdir="${doc.dir}">
+			<classpath refid="build.classpath"/>
+			<fileset dir="${source.dir}"/>
+		</javadoc>
 	</target>
-	<target name="dist" description="???">
-		<jar destfile="SearchMap.jar" basedir="${doc.dir}">
+	<target name="dist" depends="compile" description="creates jar file of class">
+		<jar destfile="SearchMap.jar" basedir="${compile.dir}">
 			<manifest>
 				<attribute name="Main-Class" value="SearchMap"/>
 			</manifest>
@@ -50,6 +49,5 @@
 	<target name="clean" description="clears folders except src/lib/git">
 		<delete dir="${compile.dir}"/>
 		<delete dir="${doc.dir}"/>
-		<delete dir="${dist.dir}"/>
 	</target>
 </project>
